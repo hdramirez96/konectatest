@@ -1,0 +1,36 @@
+﻿<link href="~/Content/konecta.employees.css" rel="stylesheet" />
+@model IEnumerable<Konecta.Models.Employee>
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Empleados</h2>
+
+<p>
+    @Html.ActionLink("Crear", "Create", "Employees", null, new { @class = "btn btn-dark" })
+</p>
+
+@(Html.Kendo().Grid<Konecta.Models.Employee>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Name).Width(150).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+            columns.Bound(c => c.AdmissionDate).Width(150).Filterable(ftb => ftb.Cell(cell => cell.Enabled(false)));
+            columns.Bound(c => c.Salary).Width(150).Filterable(ftb => ftb.Cell(cell => cell.Enabled(false)));
+            columns.Template(e => { }).ClientTemplate("<div class='employee-edit'> <a style='margin: auto' href='/Employees/Edit/#: EmployeeId #'> <span class='glyphicon glyphicon-pencil'></span></a> </div>").Width(30).Title("Editar");
+        })
+        .HtmlAttributes(new { style = "height: 400px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Employees_Read", "Employees"))
+            .PageSize(20)
+        )
+)

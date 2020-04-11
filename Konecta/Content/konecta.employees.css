@@ -1,0 +1,19 @@
+﻿body {
+}
+
+.btn-dark:hover {
+    color: #fff;
+}
+
+.btn-dark {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.employee-edit {
+    width: 100%;
+    display: flex;
+}
+
+

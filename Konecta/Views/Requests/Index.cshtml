@@ -1,0 +1,38 @@
+﻿<link href="~/Content/konecta.requests.css" rel="stylesheet" />
+@model IEnumerable<Konecta.Models.Entities.Request>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitudes</h2>
+
+<p>
+    @Html.ActionLink("Crear", "Create", "Requests", null, new { @class = "btn btn-dark" })
+</p>
+
+@(Html.Kendo().Grid<Konecta.Controllers.ViewModels.RequestViewModel>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+            columns.Bound(x => x.Code).Width(50);
+            columns.Bound(x => x.Description).Width(150);
+            columns.Bound(x => x.Summary).Width(150);
+            columns.Bound(x => x.EmployeeName).Width(150);
+            columns.Template(e => { }).ClientTemplate("<div class='request-edit'> <a style='margin: auto' href='/Requests/Edit/#: RequestId #'> <span class='glyphicon glyphicon-pencil'></span></a> </div>").Width(30).Title("Editar");
+        })
+        .HtmlAttributes(new { style = "height: 400px;" })
+        .Scrollable()
+        .Groupable()
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("Requests_Read", "Requests"))
+            .PageSize(20)
+        )
+)
